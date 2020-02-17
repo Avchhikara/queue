@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-from connect import PostgresDB
+from flask import Flask, render_template, request
+from add import Add
 
 
 app = Flask(__name__)
@@ -7,30 +7,22 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    # string = ""
-    # with PostgresDB as cursor:
-    #     cursor.execute("Select * from test")
-    #     string = cursor.fetchall()
-    # return string
     return render_template('home.html')
 
 
-@app.route("/add")
+@app.route("/add", methods=['GET'])
 def add():
-    # Will add the job to the queue table only
-    # string = ""
-    # with PostgresDB as cursor:
-    #     cursor.execute("Select * from test")
-    #     string = cursor.fetchall()
-    # return string
-    return "This is the add page"
+    return render_template('add.html')
+
+
+@app.route('/add', methods=['POST'])
+def add_post():
+    val = Add(request)
+    print(val.correct_data)
+    if val.correct_data:
+        return val.message, 200
+    return val.message, 400
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-with PostgresDB() as cursor:
-    cursor.execute("Select * from test")
-    string = cursor.fetchall()
-print(string)

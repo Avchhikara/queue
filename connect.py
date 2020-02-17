@@ -26,5 +26,8 @@ class PostgresDB:
         return self.cursor
 
     def __exit__(self, type, value, traceback):
+        # Saving all the data
+        self.connection.commit()
+        # Closing all the connections
         self.cursor.close()
         self.connection.close()
